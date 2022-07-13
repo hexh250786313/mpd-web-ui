@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "lib": ["dom"],
+    "lib": ["dom", "esnext"],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,
@@ -12,7 +12,25 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@assets": ["src/assets"],
+      "@assets/*": ["src/assets/*"],
+      "@lib": ["src/lib"],
+      "@lib/*": ["src/lib/*"],
+      "@components": ["src/components"],
+      "@components/*": ["src/components/*"],
+      "@containers": ["src/containers"],
+      "@containers/*": ["src/containers/*"],
+      "@routes": ["src/routes"],
+      "@routes/*": ["src/routes/*"],
+      "@i18n": ["src/i18n"],
+      "@i18n/*": ["src/i18n/*"],
+      "@stores": ["src/stores"],
+      "@stores/*": ["src/stores/*"],
+      "@models": ["src/models"],
+      "@models/*": ["src/models/*"],
+      "@styles": ["src/styles"],
+      "@styles/*": ["src/styles/*"],
+      "@types": ["src/types/index.ts"]
     }
   },
   "include": ["src", "windi.config.ts", "vite.config.ts", "*.d.ts"],

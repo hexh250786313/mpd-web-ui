@@ -4,7 +4,9 @@
   "description": "Web port of MPD",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "npx rimraf build",
+    "start": "vite",
+    "build": "yarn clean && vite build"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,cjs,mjs}": [
@@ -36,8 +38,11 @@
   "homepage": "https://github.com/hexh250786313/mpd-web-ui#readme",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
+    "@vitejs/plugin-react": "^1.3.2",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -46,6 +51,15 @@
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
+    "sass": "^1.53.0",
+    "typescript": "^4.7.4",
+    "vite": "^2.9.14",
+    "vite-tsconfig-paths": "^3.5.0"
+  },
+  "dependencies": {
+    "jotai": "^1.7.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0"
   }
 }
