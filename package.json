@@ -38,6 +38,7 @@
   "homepage": "https://github.com/hexh250786313/mpd-web-ui#readme",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",
+    "@types/lodash-es": "^4.17.6",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
@@ -52,12 +53,14 @@
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "sass": "^1.53.0",
+    "type-fest": "^2.16.0",
     "typescript": "^4.7.4",
     "vite": "^2.9.14",
     "vite-tsconfig-paths": "^3.5.0"
   },
   "dependencies": {
     "jotai": "^1.7.4",
+    "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0"

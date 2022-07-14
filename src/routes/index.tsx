@@ -7,8 +7,18 @@ import {
   Navigate,
   Outlet,
 } from 'react-router-dom'
-import { Page } from '@components'
-import type { RouteConfigItem } from '@types'
+import { Page } from '@containers'
+import { Language } from '@i18n'
+
+type AnyObject = Record<string, unknown>
+
+export interface RouteConfigItem extends AnyObject {
+  path: string
+  component?: React.ElementType
+  title?: keyof typeof Language.en_US
+  routes?: RouteConfigItem[]
+  redirect?: string
+}
 
 /**
  * Generate the routes with "redirect". These routes will no be rendered but will be used to redirect
