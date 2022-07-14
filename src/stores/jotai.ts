@@ -1,6 +1,7 @@
 import type { Get } from 'type-fest'
+import type { Lang } from '@i18n'
 
-import { getDefaultLanguage, Lang, Language, locales } from '@i18n'
+import { getDefaultLanguage, Language, locales } from '@i18n'
 import { atom, useAtom } from 'jotai'
 import { get } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
