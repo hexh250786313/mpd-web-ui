@@ -7,11 +7,11 @@ export const Page: React.FC<RouteConfigItem> = (props) => {
   const { title } = props
   const Component = props.component as React.ElementType
   const { translation } = useI18n()
-  const t = useMemo(() => translation(title).t, [translation])
+  const t = useMemo(() => translation(title).t, [translation, title])
 
   useEffect(() => {
-    window.document.title = t('title')
-  }, [title])
+    window.document.title = t('title') || title
+  }, [t])
 
   return <Component />
 }
