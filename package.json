@@ -61,6 +61,7 @@
   "dependencies": {
     "jotai": "^1.7.4",
     "lodash-es": "^4.17.21",
+    "neverthrow": "^4.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",

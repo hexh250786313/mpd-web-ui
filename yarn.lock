@@ -1779,6 +1779,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+neverthrow@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/neverthrow/-/neverthrow-4.4.2.tgz#70d74112207183a0fb1e17251a9b4d995415103b"
+  integrity sha512-QVY0ylzBF71pUdLshRrqtweMgqKnE3R37/T82Z5bhO/z8P9z96PC/5pEl2FmiZSy0p+3lsjKerh6jmTWM5fv2g==
+
 node-releases@^2.0.5:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.6.tgz#8a7088c63a55e493845683ebf3c828d8c51c5503"
