@@ -2,7 +2,7 @@ import { useTestJotaiStore } from '@stores'
 import React from 'react'
 import style from './index.module.scss'
 
-export const Test: React.FC<any> = () => {
+export const Settings: React.FC<any> = () => {
   const { data, set } = useTestJotaiStore()
 
   return (

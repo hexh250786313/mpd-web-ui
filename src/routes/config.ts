@@ -21,11 +21,12 @@ const routes: RouteConfigItem[] = [
       },
       {
         path: '/library',
-        component: Test,
+        // component: BasicLayout,
         routes: [
           {
             path: '/library',
             component: Test,
+            title: 'Library',
           },
           {
             path: '/library/artists',

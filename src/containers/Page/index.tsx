@@ -13,5 +13,9 @@ export const Page: React.FC<RouteConfigItem> = (props) => {
     window.document.title = t('title') || title
   }, [t])
 
-  return <Component />
+  return (
+    <div>
+      <Component />
+    </div>
+  )
 }
