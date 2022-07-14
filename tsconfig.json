@@ -30,7 +30,9 @@
       "@models/*": ["src/models/*"],
       "@styles": ["src/styles"],
       "@styles/*": ["src/styles/*"],
-      "@types": ["src/types/index.ts"]
+      "@types": ["src/types/index.ts"],
+      "@layouts": ["src/layouts"],
+      "@layouts/*": ["src/layouts/*"]
     }
   },
   "include": ["src", "windi.config.ts", "vite.config.ts", "*.d.ts"],

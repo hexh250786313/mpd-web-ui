@@ -1,5 +1,4 @@
-import { Login, Test } from '@components'
-import { BasicLayout } from '@containers/BasicLayout'
+import { Login, Test, BasicLayout } from '@components'
 import { RouteConfigItem } from '@types'
 
 const routes: RouteConfigItem[] = [
