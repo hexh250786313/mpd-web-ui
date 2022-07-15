@@ -41,15 +41,29 @@ export const Test: React.FC<any> = () => {
 
   const play = useMemo(() => {
     return async () => {
-      const res = await clientRef.current.playbackPlay()
+      const res = await clientRef.current.playback.play()
       console.log('play', res)
     }
   }, [clientRef])
 
   const pause = useMemo(() => {
     return async () => {
-      const res = await clientRef.current.playbackPause()
+      const res = await clientRef.current.playback.pause()
       console.log('pause', res)
+    }
+  }, [clientRef])
+
+  const dbUpdate = useMemo(() => {
+    return async () => {
+      const res = await clientRef.current.db.update()
+      console.log('DB Update', res)
+    }
+  }, [clientRef])
+
+  const test1 = useMemo(() => {
+    return async () => {
+      const res = await clientRef.current.test()
+      console.log('test', res)
     }
   }, [clientRef])
 
@@ -60,6 +74,8 @@ export const Test: React.FC<any> = () => {
       <button onClick={() => set({ a: 'aa', b: 'bb' })}>click</button>
       <button onClick={() => play()}>play</button>
       <button onClick={() => pause()}>pause</button>
+      <button onClick={() => dbUpdate()}>dbUpdate</button>
+      <button onClick={() => test1()}>test1</button>
     </div>
   )
 }

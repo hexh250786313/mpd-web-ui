@@ -1,31 +1,34 @@
 import type { FetchOptions } from 'ohmyfetch'
 
 import { $fetch } from 'ohmyfetch'
+import { Playback, DB } from '@lib/handlers'
 
-interface ResponseSuccess<T> {
+interface MpdApiRetrundSuccess<T> {
   code: 200
   message: 'OK'
   data: T
 }
 
-interface ResponseError<T> {
+interface MpdApiRetrundFailed<T> {
   code: 500
   message: string
   data?: T
 }
 
-type Response<T = any> = ResponseError<T> | ResponseSuccess<T>
+export type MpdApiResponse<T = any> =
+  | MpdApiRetrundFailed<T>
+  | MpdApiRetrundSuccess<T>
 
 /**
  * Generate fetch options combined with body
  *  */
-const getFetch: <T extends Response['data']>(
+const getFetch: <T extends MpdApiResponse['data']>(
   url: string,
   args: Partial<{
     fnArgs: string[]
     method: string
   }>
-) => Promise<Response<T>> = function (
+) => Promise<MpdApiResponse<T>> = function (
   url: string,
   args = {
     fnArgs: [],
@@ -45,10 +48,10 @@ const getFetch: <T extends Response['data']>(
     cache: 'no-cache',
     body: JSON.stringify(body),
   }
-  return $fetch<Response>(url, opts)
+  return $fetch<MpdApiResponse>(url, opts)
 }
 
-class Fetch {
+export class Fetch {
   private readonly baseUrl: string
 
   constructor(baseUrl: string) {
@@ -62,28 +65,19 @@ class Fetch {
 
 export class Client {
   private readonly fetch: InstanceType<typeof Fetch>
+  public readonly playback: Playback
+  public readonly db: DB
 
   constructor(baseUrl: string) {
     if (/\d(\/+)$/g.test(baseUrl)) {
       baseUrl = baseUrl.replace(/(\/+)$/g, '')
     }
     this.fetch = new Fetch(baseUrl)
-  }
-
-  async playbackPlay() {
-    return this.fetch.post<'OK' | undefined>('/playback/play')
-  }
-
-  async playbackPause() {
-    return this.fetch.post<'OK' | undefined>('/playback/pause')
+    this.playback = new Playback(this.fetch)
+    this.db = new DB(this.fetch)
   }
 
   async test() {
-    const qq = await this.playbackPlay()
-    if (qq.code === 500) {
-      if (qq.message === 'jj') {
-        //
-      }
-    }
+    // const qq = await this.fetch.post('/jjjj')
   }
 }
