@@ -10,7 +10,7 @@ export const Page: React.FC<RouteConfigItem> = (props) => {
   const t = useMemo(() => translation(title).t, [translation, title])
 
   useEffect(() => {
-    window.document.title = `${t('title') || title} - MPD-web-ui`
+    window.document.title = `${t('title') || title} - MPD`
   }, [t])
 
   return (

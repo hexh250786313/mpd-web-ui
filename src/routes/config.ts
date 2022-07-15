@@ -14,6 +14,12 @@ import {
 } from '@containers'
 
 const routes: RouteConfigItem[] = [
+  // @todo: should delete it later
+  {
+    path: '/test',
+    component: Test,
+    title: 'Settings',
+  },
   {
     path: '/',
     component: BasicLayout,
@@ -68,11 +74,6 @@ const routes: RouteConfigItem[] = [
       {
         path: '/settings',
         component: Settings,
-        title: 'Settings',
-      },
-      {
-        path: '/test',
-        component: Test,
         title: 'Settings',
       },
     ],

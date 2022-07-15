@@ -59,9 +59,11 @@
     "vite-tsconfig-paths": "^3.5.0"
   },
   "dependencies": {
+    "@react-hookz/web": "^15.0.1",
     "jotai": "^1.7.4",
     "lodash-es": "^4.17.21",
     "neverthrow": "^4.4.2",
+    "ohmyfetch": "^0.4.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",

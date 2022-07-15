@@ -1,8 +1,10 @@
 import { useTestJotaiStore } from '@stores'
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import style from './index.module.scss'
 import useSWR from 'swr'
 import { ResultAsync, Result } from 'neverthrow'
+import { Client } from '@lib/request'
+import { useSyncedRef } from '@react-hookz/web'
 
 export const Test: React.FC<any> = () => {
   const { data, set } = useTestJotaiStore()
@@ -14,6 +16,7 @@ export const Test: React.FC<any> = () => {
       }, 200)
     })
   })
+  const clientRef = useSyncedRef(new Client('http://localhost:8080////'))
 
   // const promise = new Promise((res, rej) => {
   // Math.random() > 0.5 ? res(1) : rej(2)
@@ -36,11 +39,27 @@ export const Test: React.FC<any> = () => {
 
   console.log(result)
 
+  const play = useMemo(() => {
+    return async () => {
+      const res = await clientRef.current.playbackPlay()
+      console.log('play', res)
+    }
+  }, [clientRef])
+
+  const pause = useMemo(() => {
+    return async () => {
+      const res = await clientRef.current.playbackPause()
+      console.log('pause', res)
+    }
+  }, [clientRef])
+
   return (
     <div className={style.test}>
       <p>{data.a}</p>
       <p>{data.b}</p>
       <button onClick={() => set({ a: 'aa', b: 'bb' })}>click</button>
+      <button onClick={() => play()}>play</button>
+      <button onClick={() => pause()}>pause</button>
     </div>
   )
 }
