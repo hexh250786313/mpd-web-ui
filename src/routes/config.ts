@@ -1,7 +1,17 @@
 import type { RouteConfigItem } from '@routes'
 
-import { Test, BasicLayout } from '@components'
-import { Queue } from '@containers'
+import { BasicLayout, Test } from '@components'
+import {
+  Albums,
+  Artists,
+  Files,
+  Genres,
+  Library,
+  Playlists,
+  Queue,
+  Search,
+  Settings,
+} from '@containers'
 
 const routes: RouteConfigItem[] = [
   {
@@ -16,7 +26,7 @@ const routes: RouteConfigItem[] = [
       },
       {
         path: '/playlists',
-        component: Test,
+        component: Playlists,
         title: 'Playlists',
       },
       {
@@ -25,38 +35,43 @@ const routes: RouteConfigItem[] = [
         routes: [
           {
             path: '/library',
-            component: Test,
+            component: Library,
             title: 'Library',
           },
           {
             path: '/library/artists',
-            component: Test,
+            component: Artists,
             title: 'Artists',
           },
           {
             path: '/library/albums',
-            component: Test,
+            component: Albums,
             title: 'Albums',
           },
           {
             path: '/library/genres',
-            component: Test,
+            component: Genres,
             title: 'Genres',
           },
           {
             path: '/library/files',
-            component: Test,
+            component: Files,
             title: 'Files',
           },
           {
             path: '/library/search',
-            component: Test,
+            component: Search,
             title: 'Search',
           },
         ],
       },
       {
         path: '/settings',
+        component: Settings,
+        title: 'Settings',
+      },
+      {
+        path: '/test',
         component: Test,
         title: 'Settings',
       },
