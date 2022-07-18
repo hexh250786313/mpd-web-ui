@@ -1,28 +1,10 @@
-import { useTestJotaiStore } from '@stores'
-import React, { useEffect, useMemo } from 'react'
+import { useClient } from '@stores/request'
+import { Result } from 'neverthrow'
+import React, { useMemo } from 'react'
 import style from './index.module.scss'
-import useSWR from 'swr'
-import { ResultAsync, Result } from 'neverthrow'
-import { Client } from '@lib/request'
-import { useSyncedRef } from '@react-hookz/web'
 
 export const Test: React.FC<any> = () => {
-  const { data, set } = useTestJotaiStore()
-  const result = useSWR(['/api/test', data.a], async () => {
-    return new Promise((resolve) => {
-      console.log('fetch')
-      setTimeout(() => {
-        resolve({ a: 0, b: 99 })
-      }, 200)
-    })
-  })
-  const clientRef = useSyncedRef(new Client('http://localhost:8080////'))
-
-  // const promise = new Promise((res, rej) => {
-  // Math.random() > 0.5 ? res(1) : rej(2)
-  // })
-
-  // const test = ResultAsync.fromPromise(promise, (e) => e as Error)
+  const client = useClient()
 
   const mainErrorFn = () => {
     if (Math.random() > 0.5) {
@@ -32,50 +14,68 @@ export const Test: React.FC<any> = () => {
     throw new Error('Failed')
   }
 
-  // const test = Result.fromThrowable(mainErrorFn)
   const test = Result.fromThrowable(mainErrorFn, (e) => e as Error)
 
   console.log(test())
 
-  console.log(result)
-
   const play = useMemo(() => {
     return async () => {
-      const res = await clientRef.current.playback.play()
+      const res = await client.playback.play()
       console.log('play', res)
     }
-  }, [clientRef])
+  }, [client])
 
   const pause = useMemo(() => {
     return async () => {
-      const res = await clientRef.current.playback.pause()
+      const res = await client.playback.pause()
       console.log('pause', res)
     }
-  }, [clientRef])
+  }, [client])
 
   const dbUpdate = useMemo(() => {
     return async () => {
-      const res = await clientRef.current.db.update()
+      const res = await client.db.update()
       console.log('DB Update', res)
     }
-  }, [clientRef])
+  }, [client])
 
-  const test1 = useMemo(() => {
+  const stop = useMemo(() => {
     return async () => {
-      const res = await clientRef.current.test()
+      const res = await client.playback.stop()
       console.log('test', res)
     }
-  }, [clientRef])
+  }, [client])
+
+  const next = useMemo(() => {
+    return async () => {
+      const res = await client.playback.next()
+      console.log('next', res)
+    }
+  }, [client])
+
+  const prev = useMemo(() => {
+    return async () => {
+      const res = await client.playback.prev()
+      console.log('prev', res)
+    }
+  }, [client])
+
+  const info = useMemo(() => {
+    return async () => {
+      const res = await client.queue.info()
+      console.log('info', res)
+    }
+  }, [client])
 
   return (
     <div className={style.test}>
-      <p>{data.a}</p>
-      <p>{data.b}</p>
-      <button onClick={() => set({ a: 'aa', b: 'bb' })}>click</button>
       <button onClick={() => play()}>play</button>
       <button onClick={() => pause()}>pause</button>
       <button onClick={() => dbUpdate()}>dbUpdate</button>
-      <button onClick={() => test1()}>test1</button>
+      <button onClick={() => stop()}>stop</button>
+      <button onClick={() => next()}>next</button>
+      <button onClick={() => prev()}>prev</button>
+      <button onClick={() => info()}>info</button>
     </div>
   )
 }

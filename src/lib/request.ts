@@ -1,72 +1,49 @@
-import type { FetchOptions } from 'ohmyfetch'
+import { Playback, DB, Playlists, Queue, Status } from '@lib/mpd-modules'
+import { getFetch } from '@lib/helper'
 
-import { $fetch } from 'ohmyfetch'
-import { Playback, DB } from '@lib/handlers'
-
-interface MpdApiRetrundSuccess<T> {
-  code: 200
-  message: 'OK'
+interface MpdApiRetrundData<T> {
   data: T
 }
 
-interface MpdApiRetrundFailed<T> {
+interface MpdApiSuccess<T> extends MpdApiRetrundData<T> {
+  code: 200
+  message: 'OK'
+}
+
+interface MpdApiFailed<T> extends MpdApiRetrundData<T> {
   code: 500
   message: string
-  data?: T
 }
 
-export type MpdApiResponse<T = any> =
-  | MpdApiRetrundFailed<T>
-  | MpdApiRetrundSuccess<T>
+export type MpdApiResponse<T = any> = MpdApiFailed<T> | MpdApiSuccess<T>
 
-/**
- * Generate fetch options combined with body
- *  */
-const getFetch: <T extends MpdApiResponse['data']>(
-  url: string,
-  args: Partial<{
-    fnArgs: string[]
-    method: string
-  }>
-) => Promise<MpdApiResponse<T>> = function (
-  url: string,
-  args = {
-    fnArgs: [],
-    method: 'get',
-  }
-) {
-  const { method, fnArgs } = args
-  const body = { fnArgs }
-  const opts: FetchOptions<'json'> = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json, text/plain, */*',
-    },
-    credentials: 'include',
-    mode: 'cors',
-    cache: 'no-cache',
-    body: JSON.stringify(body),
-  }
-  return $fetch<MpdApiResponse>(url, opts)
-}
+export type FetchType = typeof Fetch
 
-export class Fetch {
+class Fetch {
   private readonly baseUrl: string
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl
   }
 
-  async post<T>(url: string, args?: string[]) {
-    return getFetch<T>(this.baseUrl + url, { method: 'post', fnArgs: args })
+  async post<T extends MpdApiResponse['data']>(
+    url: string,
+    args?: (string | number)[]
+  ) {
+    return getFetch<MpdApiResponse<T>>(this.baseUrl + url, {
+      method: 'post',
+      fnArgs: args,
+    })
   }
 }
 
 export class Client {
-  private readonly fetch: InstanceType<typeof Fetch>
-  public readonly playback: Playback
-  public readonly db: DB
+  private readonly fetch
+  public readonly playback
+  public readonly db
+  public readonly playlists
+  public readonly queue
+  public readonly status
 
   constructor(baseUrl: string) {
     if (/\d(\/+)$/g.test(baseUrl)) {
@@ -75,6 +52,9 @@ export class Client {
     this.fetch = new Fetch(baseUrl)
     this.playback = new Playback(this.fetch)
     this.db = new DB(this.fetch)
+    this.playlists = new Playlists(this.fetch)
+    this.queue = new Queue(this.fetch)
+    this.status = new Status(this.fetch)
   }
 
   async test() {

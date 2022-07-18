@@ -1,4 +1,16 @@
 const EN = {
+  Playing: {
+    title: 'Playing',
+    volume: 'Volume',
+    shuffle: 'Shuffle',
+    repeat: 'Repeat',
+    next: 'Skip',
+    prev: 'Back',
+    stop: 'Stop',
+    toggle: 'Play/Pause',
+    play: 'Play',
+    pause: 'Pause',
+  },
   Queue: {
     title: 'Queue',
     controllBar: {

@@ -1,6 +1,6 @@
 import type { RouteConfigItem } from '@routes'
-import { useI18n } from '@stores'
 
+import { useI18n } from '@stores'
 import React, { useEffect, useMemo } from 'react'
 
 export const Page: React.FC<RouteConfigItem> = (props) => {
