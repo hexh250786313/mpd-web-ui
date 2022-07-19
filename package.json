@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "@react-hookz/web": "^15.0.1",
+    "eventemitter3": "^4.0.7",
     "immer": "^9.0.15",
     "jotai": "^1.7.4",
     "lodash-es": "^4.17.21",

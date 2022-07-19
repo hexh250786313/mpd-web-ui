@@ -1,13 +1,25 @@
 import { Client } from '@lib/request'
-import { atom, useAtom } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
+import { useLocation } from 'react-router-dom'
 
 const clientAtom = atom({
   key: '',
   instance: null as Client | null,
 })
 
+export const localStorageAtom = atomWithStorage<
+  Array<{
+    hostname: string
+    port: string
+    secret: string
+  }>
+>('externalControllers', [])
+
 export function useAPIInfo() {
+  const location = useLocation()
   const qs = new URLSearchParams(location.search)
+  const localStorage = useAtomValue(localStorageAtom)
 
   let url: URL | undefined
   {
