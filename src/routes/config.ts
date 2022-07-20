@@ -45,13 +45,9 @@ const routes: RouteConfigItem[] = [
           {
             path: '/library',
             component: Library,
+            redirect: '/library/albums',
             title: 'Library',
             routes: [
-              {
-                path: '/library/albums',
-                component: Albums,
-                title: 'Albums',
-              },
               {
                 path: '/library/albums',
                 component: Albums,
