@@ -1,8 +1,10 @@
+import type { FC } from 'react'
+
 import { useI18n } from '@stores'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import style from './index.module.scss'
 
-export const Search: React.FC<any> = () => {
+export const Search: FC<any> = () => {
   const { translation } = useI18n()
   const t = useMemo(() => translation('Search').t, [translation])
 

@@ -15,4 +15,5 @@ export default defineConfig((env) => ({
   ],
   base: './',
   build: { reportCompressedSize: false, outDir: 'build' },
+  esbuild: { jsxInject: "import React from 'react'" },
 }))

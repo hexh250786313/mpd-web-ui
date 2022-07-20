@@ -6,7 +6,9 @@
   "scripts": {
     "clean": "npx rimraf build",
     "start": "vite",
-    "build": "yarn clean && vite build"
+    "build": "yarn clean && vite build",
+    "compress": "find ./build -name '*.js' -type f -exec gzip -k {} +",
+    "serve": "yarn build && yarn compress && npx http-server -g -p 8888 ./build"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,cjs,mjs}": [
@@ -48,6 +50,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
+    "https-server": "^0.1.2",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",

@@ -1435,6 +1435,11 @@ history@^5.2.0:
   dependencies:
     "@babel/runtime" "^7.7.6"
 
+https-server@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/https-server/-/https-server-0.1.2.tgz#a2d96654e728ba6e0d5a79d0f065e280f8a78e74"
+  integrity sha512-jmSTcw4eZxGQllYkJQm1NY65wzzHL2iCZFbOgnexBtYi+oeamLfY/zwc4nHKuEi8Wy16+V2QQTUN9L7sNBh+dw==
+
 human-signals@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-3.0.1.tgz#c740920859dafa50e5a3222da9d3bf4bb0e5eef5"

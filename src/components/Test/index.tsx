@@ -1,9 +1,11 @@
+import type { FC } from 'react'
+
 import { useClient } from '@stores/request'
 import { Result } from 'neverthrow'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import style from './index.module.scss'
 
-export const Test: React.FC<any> = () => {
+export const Test: FC<any> = () => {
   const client = useClient()
 
   const mainErrorFn = () => {

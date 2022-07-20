@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react'
+import { StrictMode } from 'react'
 import RouteView from '@routes'
 import { createRoot } from 'react-dom/client'
 

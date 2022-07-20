@@ -5,6 +5,7 @@ export class StreamReader<T> {
   protected connection: WebSocket | null = null
   protected url = ''
   protected retryInterval = 5000
+  connected = false
 
   protected connectWebsocket() {
     const url = new URL(this.url)
@@ -19,6 +20,7 @@ export class StreamReader<T> {
       setTimeout(this.connectWebsocket, this.retryInterval)
     })
     this.connection.addEventListener('open', () => {
+      this.connected = true
       this.EE.emit('ok', true)
     })
   }
@@ -43,6 +45,7 @@ export class StreamReader<T> {
   destroy() {
     this.EE.removeAllListeners()
     this.connection?.close()
+    this.connected = false
     this.connection = null
   }
 

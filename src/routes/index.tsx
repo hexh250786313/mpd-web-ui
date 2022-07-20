@@ -1,4 +1,6 @@
-import React, { Suspense } from 'react'
+import type { ElementType } from 'react'
+
+import { Suspense } from 'react'
 import routeConfig from './config'
 import {
   HashRouter as Router,
@@ -14,7 +16,7 @@ type AnyObject = Record<string, unknown>
 
 export interface RouteConfigItem extends AnyObject {
   path: string
-  component?: React.ElementType
+  component?: ElementType
   title?: keyof typeof Language.en_US
   routes?: RouteConfigItem[]
   redirect?: string

@@ -51,3 +51,15 @@ export const getFetch: <R extends Record<keyof R, unknown>>(
   }
   return $fetch(url, opts)
 }
+
+/**
+ * Convert second to minute
+ *  */
+export function convertTime(time?: number) {
+  if (time === undefined) {
+    return ''
+  }
+  const minute = Math.floor(time / 60)
+  const second = Math.floor(time % 60)
+  return `${minute}:${second < 10 ? '0' : ''}${second}`
+}
