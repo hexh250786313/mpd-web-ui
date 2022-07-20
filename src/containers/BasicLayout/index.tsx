@@ -1,5 +1,5 @@
 import type { FC, PropsWithChildren } from 'react'
-import { SideBar } from './components/SideBar'
+import { SideBar } from './components'
 
 import style from './index.module.scss'
 

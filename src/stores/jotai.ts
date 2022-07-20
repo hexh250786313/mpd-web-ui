@@ -1,19 +1,25 @@
 import type { Lang } from '@i18n'
-import type { ISong, IStatus } from '@types'
+import type { ISong, IStatus, Tag } from '@types'
 import type { Get } from 'type-fest'
 
 import { getDefaultLanguage, Language, locales } from '@i18n'
 import { useWarpImmerSetter } from '@lib/jotai'
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue, WritableAtom } from 'jotai'
 import { atomWithImmer } from 'jotai/immer'
 import { atomWithStorage } from 'jotai/utils'
 import { get } from 'lodash-es'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-import useSWR from 'swr'
+import { useCallback, useEffect, useMemo } from 'react'
+import useSWR, { KeyedMutator } from 'swr'
 import { useAPIInfo, useClient } from '@stores/request'
 import { StreamReader } from '@lib/streamer'
 import { useSyncedRef } from '@react-hookz/web'
 import { useState } from 'react'
+
+interface LibraryListHook<T extends Tag> {
+  (): {
+    update: KeyedMutator<void>
+  } & Record<`${T}s`, string[]>
+}
 
 const languageAtom = atomWithStorage<Lang | undefined>('language', undefined)
 
@@ -103,3 +109,33 @@ export function useStatusStreamReader() {
     status,
   }
 }
+
+const generateLibraryListHook: <T extends Tag>(
+  key: T,
+  atom: WritableAtom<string[], string[] | ((draft: string[]) => void), void>
+) => LibraryListHook<T> = (key, atom) => {
+  return function () {
+    const [me, setMe] = useAtom(atom)
+    const client = useClient()
+    const set = useWarpImmerSetter(setMe)
+
+    const { mutate } = useSWR([`/list/${key}s`, client], async () => {
+      const queueInfoResponse = await client.db.list<Tag>(key)
+      const rawMes = queueInfoResponse.data.map((item) => item[key])
+
+      set(rawMes)
+    })
+
+    return { [`${key}s`]: me, update: mutate } as any
+  }
+}
+
+const albumAtom = atomWithImmer<string[]>([])
+const artistsAtom = atomWithImmer<string[]>([])
+const genresAtom = atomWithImmer<string[]>([])
+const filesAtom = atomWithImmer<string[]>([])
+
+export const useAlbums = generateLibraryListHook('album', albumAtom)
+export const useArtists = generateLibraryListHook('artist', artistsAtom)
+export const useGenres = generateLibraryListHook('genre', genresAtom)
+export const useFiles = generateLibraryListHook('file', filesAtom)

@@ -59,6 +59,8 @@ export function useClient() {
     return item.instance!
   }
 
+  console.log('useClient: create new client')
+
   const client = new Client(key)
   setItem({ key, instance: client })
 

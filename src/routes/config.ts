@@ -29,14 +29,9 @@ const routes: RouteConfigItem[] = [
     routes: [
       {
         path: '/playing',
-        redirect: '/playing',
+        redirect: '/queue',
         component: Playing,
         routes: [
-          {
-            path: '/playing',
-            component: Test,
-            title: 'Playing',
-          },
           {
             path: '/queue',
             component: Queue,
@@ -49,23 +44,23 @@ const routes: RouteConfigItem[] = [
           },
           {
             path: '/library',
+            component: Library,
             title: 'Library',
-            // component: BasicLayout,
             routes: [
               {
-                path: '/library',
-                component: Library,
-                title: 'Library',
-              },
-              {
-                path: '/library/artists',
-                component: Artists,
-                title: 'Artists',
+                path: '/library/albums',
+                component: Albums,
+                title: 'Albums',
               },
               {
                 path: '/library/albums',
                 component: Albums,
                 title: 'Albums',
+              },
+              {
+                path: '/library/artists',
+                component: Artists,
+                title: 'Artists',
               },
               {
                 path: '/library/genres',

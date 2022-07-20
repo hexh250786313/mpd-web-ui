@@ -1,20 +1,20 @@
 import type { FC } from 'react'
 
+import routes from '@routes/config'
+import { getLibraryNav } from '@routes/navigation'
 import { useI18n } from '@stores'
 import { NavLink } from 'react-router-dom'
-import { getGlobalNav } from '@routes/navigation'
-import routes from '@routes/config'
 
-export const SideBar: FC = () => {
+export const TopBar: FC = () => {
+  const libraryNav = getLibraryNav(routes)
   const { translation } = useI18n()
-  const globalNav = getGlobalNav(routes)
 
-  console.log('global nav')
+  console.log('library nav')
 
   return (
     <div>
       <ul>
-        {globalNav.map((item) => {
+        {libraryNav.map((item) => {
           return (
             <li key={item.title}>
               <NavLink to={item.path}>

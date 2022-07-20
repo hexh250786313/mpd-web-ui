@@ -25,7 +25,7 @@ export function PlayBar() {
   }, [streamReader])
 
   const currentSong = playInfo?.queueInfo.find(
-    ({ id }) => id === status?.songid ?? ''
+    ({ id }) => id === status?.songid
   )
 
   return (

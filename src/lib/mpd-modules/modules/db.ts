@@ -1,4 +1,5 @@
 import type { MpdApiResponse } from '@lib/request'
+import type { Tag } from '@types'
 
 import { genPromiseQueue } from '@lib/helper'
 import { MpdModule } from '@lib/mpd-modules/module'
@@ -17,5 +18,9 @@ export class DB extends MpdModule {
       async (S: string) => await this.fetch.post<DBUpdateRes>('/db/update', [S])
     )
     return results.length > 1 ? results : results[0]
+  }
+
+  async list<T extends Tag>(tag: T) {
+    return this.fetch.post<{ [k in T]: string }[]>('/db/list', [tag])
   }
 }

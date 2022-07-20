@@ -11,6 +11,7 @@ import {
 } from 'react-router-dom'
 import { Page } from '@containers'
 import { Language } from '@i18n'
+import produce from 'immer'
 
 type AnyObject = Record<string, unknown>
 
@@ -80,7 +81,8 @@ const renderRoutes = (routes: RouteConfigItem[]) => {
   })
 }
 
-const redirectRoutes = genRedirectRoutes(routeConfig)
+const redirectRoutes =
+  produce<typeof genRedirectRoutes>(genRedirectRoutes)(routeConfig)
 
 const RouteView = () => (
   <Router basename={'/'}>

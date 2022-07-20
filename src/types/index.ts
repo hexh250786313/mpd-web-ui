@@ -72,6 +72,8 @@ export interface IPauseStatus {
   playlistlength: number
   mixrampdb: number
   state: string
+  time?: never
+  songid?: never
 }
 
 /**
@@ -143,4 +145,6 @@ export interface IPlayStatus {
   }
 }
 
-export type IStatus = IPlayStatus
+export type IStatus = IPlayStatus | IPauseStatus
+
+export type Tag = 'album' | 'artist' | 'genre' | 'file'
