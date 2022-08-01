@@ -36,20 +36,17 @@ export const getFetch: <R extends Record<keyof R, unknown>>(
     method: 'get',
   }
 ) {
+  let errorData: any = null
   const { method, fnArgs } = args
   const body = { fnArgs }
   const opts: FetchOptions<'json'> = {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json, text/plain, */*',
+    body,
+    onResponseError: async ({ response }) => {
+      errorData = response._data
     },
-    credentials: 'include',
-    mode: 'cors',
-    cache: 'no-cache',
-    body: JSON.stringify(body),
   }
-  return $fetch(url, opts)
+  return $fetch(url, opts).catch(() => errorData)
 }
 
 /**

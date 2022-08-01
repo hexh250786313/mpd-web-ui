@@ -90,7 +90,7 @@ export function useStatusStreamReader() {
       setStatus(data)
     }
 
-    const url = `${protocol}//${apiInfo.hostname}:${apiInfo.port}/status`
+    const url = `${protocol}//${apiInfo.hostname}:${apiInfo.port}/`
     streamReader.connect(url)
     streamReader.subscribe('data', handleReceivedStatus)
     return () => {
