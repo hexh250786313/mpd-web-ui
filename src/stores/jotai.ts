@@ -99,10 +99,10 @@ export function useStatusStreamReader() {
   }, [apiInfoRef, streamReader])
 
   const triggerReport = () =>
-    streamReader.send(JSON.stringify({ channel: 'mpd', packet: 'report' }))
+    streamReader.send({ channel: 'mpd', packet: 'report' })
 
   const stopReport = () =>
-    streamReader.send(JSON.stringify({ channel: 'mpd', packet: 'deport' }))
+    streamReader.send({ channel: 'mpd', packet: 'deport' })
 
   return {
     triggerReport,
