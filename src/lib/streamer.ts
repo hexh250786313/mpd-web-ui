@@ -1,5 +1,21 @@
 import EventEmitter from 'eventemitter3'
 
+export interface WSResponse {
+  channel: 'mpd'
+  packet:
+    | 'database'
+    | 'update'
+    | 'stored_playlist'
+    | 'playlist'
+    | 'player'
+    | 'mixer'
+    | 'output'
+    | 'sticker'
+    | 'subscription'
+    | 'message'
+  data?: any
+}
+
 export class StreamReader<T> {
   protected EE = new EventEmitter()
   protected connection: WebSocket | null = null
@@ -11,8 +27,11 @@ export class StreamReader<T> {
     const url = new URL(this.url)
     this.connection = new WebSocket(url.toString())
     this.connection.addEventListener('message', (msg) => {
-      const data = JSON.parse(msg.data)
-      this.EE.emit('data', data?.data)
+      const res: WSResponse = JSON.parse(msg.data)
+      if (res.channel === 'mpd' && res.packet) {
+        console.log('from ws', res)
+        this.EE.emit(`mpd-${res.packet}`, res.data)
+      }
     })
     this.connection.addEventListener('error', (err) => {
       this.EE.emit('error', err)
@@ -34,11 +53,14 @@ export class StreamReader<T> {
     this.connectWebsocket()
   }
 
-  subscribe(event: string, callback: (data: T[]) => void) {
+  subscribe(
+    event: `mpd-${WSResponse['packet']}` | 'error' | 'ok',
+    callback: (data: any) => void
+  ) {
     this.EE.addListener(event, callback)
   }
 
-  unsubscribe(event: string, callback: (data: T[]) => void) {
+  unsubscribe(event: string, callback: (data: any) => void) {
     this.EE.removeListener(event, callback)
   }
 

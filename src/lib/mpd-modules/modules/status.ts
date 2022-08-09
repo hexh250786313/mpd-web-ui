@@ -1,8 +1,15 @@
+import type { IPlaying, ISong } from '@types'
+
 import { MpdModule } from '@lib/mpd-modules/module'
-import { ISong } from '@types'
+
+export interface IStatus {
+  queue: ISong[]
+  current: ISong
+  playing: IPlaying
+}
 
 export class Status extends MpdModule {
-  async currentSong() {
-    return this.fetch.post<ISong>('/status/currentsong')
+  async get() {
+    return this.fetch.post<IStatus>('/mpd/web/status/get')
   }
 }

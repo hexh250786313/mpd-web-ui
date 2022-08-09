@@ -1,7 +1,7 @@
 import type { Draft } from 'immer'
 
 import produce from 'immer'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 export type WritableDraft<T> = (draft: Draft<T>) => void
 
@@ -40,4 +40,28 @@ export function useWarpImmerSetter<T>(setter: (f: WritableDraft<T>) => void) {
   }, [setter])
 
   return set
+}
+
+export function useInterval(
+  callback: () => void,
+  delay: number | null,
+  deps: any[] = []
+) {
+  const savedCallback = useRef(callback)
+
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
+
+  useEffect(() => {
+    if (!delay && delay !== 0) {
+      return
+    }
+
+    const id = setInterval(() => {
+      savedCallback.current()
+    }, delay)
+
+    return () => clearInterval(id)
+  }, [delay, ...deps])
 }

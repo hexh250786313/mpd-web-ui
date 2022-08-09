@@ -1,59 +1,48 @@
-import { convertTime } from '@lib/helper'
-import { useClient, useI18n, usePlayInfo, useStatusStreamReader } from '@stores'
+import type { IPlaying } from '@types'
+
+import {
+  useClient,
+  useI18n,
+  usePlayInfo,
+  usePlayingStreamReader,
+} from '@stores'
 import { useLayoutEffect, useMemo } from 'react'
+import { Progress } from './components'
 
 export function PlayBar() {
   const client = useClient()
   const { playInfo, update } = usePlayInfo()
   const { translation } = useI18n()
   const t = useMemo(() => translation('Playing').t, [translation])
-  const { triggerReport, stopReport, streamReader, status } =
-    useStatusStreamReader()
+  const { streamReader, set } = usePlayingStreamReader()
+
+  const setStatus = (data: IPlaying) => {
+    update()
+    set(data)
+  }
 
   useLayoutEffect(() => {
-    if (streamReader.connected) {
-      triggerReport()
-    } else {
-      streamReader.subscribe('ok', triggerReport)
-    }
+    streamReader.unsubscribe('mpd-player', setStatus)
+    streamReader.subscribe('mpd-player', setStatus)
     return () => {
-      streamReader.unsubscribe('ok', triggerReport)
-      if (streamReader.connected) {
-        stopReport()
-      }
+      streamReader.unsubscribe('mpd-player', setStatus)
     }
   }, [streamReader])
-
-  const currentSong = playInfo?.queueInfo.find(
-    ({ id }) => id === status?.songid
-  )
 
   return (
     <div>
       <h1>
-        {
-          // {currentSong?.title} - {currentSong?.artist}
-        }
-        {playInfo?.currentSong?.artist} - {playInfo?.currentSong?.title}
+        {playInfo?.current?.artist} - {playInfo?.current?.title}
       </h1>
-      <div>
-        {convertTime(status?.time?.elapsed)} /{' '}
-        {convertTime(status?.time?.total)}
-      </div>
-      <button onClick={() => client.playback.prev().then(() => update())}>
-        {t('prev')}
-      </button>
-      <button onClick={() => client.playback.stop().then(() => update())}>
-        {t('stop')}
-      </button>
-      <button onClick={() => client.playback.toggle().then(() => update())}>
-        {t('toggle')}
-      </button>
-      <button onClick={() => client.playback.next().then(() => update())}>
-        {t('next')}
-      </button>
-      <button onClick={() => triggerReport()}>sendWS</button>
-      <button onClick={() => stopReport()}>stopWS</button>
+      <Progress
+        elapsed={playInfo?.playing?.time?.elapsed}
+        total={playInfo?.playing?.time?.total}
+        status={playInfo?.playing?.state}
+      />
+      <button onClick={() => client.playback.prev()}>{t('prev')}</button>
+      <button onClick={() => client.playback.stop()}>{t('stop')}</button>
+      <button onClick={() => client.playback.toggle()}>{t('toggle')}</button>
+      <button onClick={() => client.playback.next()}>{t('next')}</button>
     </div>
   )
 }

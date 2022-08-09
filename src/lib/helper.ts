@@ -26,19 +26,19 @@ export async function genPromiseQueue<T, P = any>(
 export const getFetch: <R extends Record<keyof R, unknown>>(
   url: string,
   args: Partial<{
-    fnArgs: (string | number)[]
+    commandArgs: (string | number)[]
     method: string
   }>
 ) => Promise<R> = function (
   url: string,
   args = {
-    fnArgs: [],
+    commandArgs: [],
     method: 'get',
   }
 ) {
   let errorData: any = null
-  const { method, fnArgs } = args
-  const body = { fnArgs }
+  const { method, commandArgs } = args
+  const body = { commandArgs }
   const opts: FetchOptions<'json'> = {
     method,
     body,
@@ -54,7 +54,7 @@ export const getFetch: <R extends Record<keyof R, unknown>>(
  *  */
 export function convertTime(time?: number) {
   if (time === undefined) {
-    return ''
+    return '--'
   }
   const minute = Math.floor(time / 60)
   const second = Math.floor(time % 60)

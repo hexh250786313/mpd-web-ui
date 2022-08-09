@@ -32,7 +32,7 @@ class Fetch {
   ) {
     return getFetch<MpdApiResponse<T>>(this.baseUrl + url, {
       method: 'post',
-      fnArgs: args,
+      commandArgs: args,
     })
   }
 }

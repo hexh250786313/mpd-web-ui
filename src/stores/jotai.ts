@@ -1,5 +1,5 @@
 import type { Lang } from '@i18n'
-import type { ISong, IStatus, Tag } from '@types'
+import type { ISong, IPlaying, Tag } from '@types'
 import type { Get } from 'type-fest'
 import type { KeyedMutator } from 'swr'
 import type { WritableAtom } from 'jotai'
@@ -47,8 +47,9 @@ export function useI18n() {
 }
 
 export const playInfoAtom = atomWithImmer({
-  queueInfo: [] as ISong[],
-  currentSong: undefined as ISong | undefined,
+  queue: [] as ISong[],
+  current: null as ISong | null,
+  playing: null as IPlaying | null,
 })
 
 export function usePlayInfo() {
@@ -56,17 +57,21 @@ export function usePlayInfo() {
   const set = useWarpImmerSetter(setPlayInfo)
   const client = useClient()
 
-  const { mutate } = useSWR(['/playinfo', client], async () => {
-    const queueInfoResponse = await client.queue.info()
-    const currentSongResponse = await client.status.currentSong()
-    const rawQueueInfo = queueInfoResponse.data
-    const rawCurrentSong = currentSongResponse.data
-    const playInfo = {
-      queueInfo: rawQueueInfo,
-      currentSong: rawCurrentSong,
+  const { mutate } = useSWR(
+    ['/mpd/status', client],
+    async () => {
+      const response = await client.status.get()
+      const playInfo = {
+        queue: response.data.queue,
+        current: response.data.current,
+        playing: response.data.playing,
+      }
+      set(playInfo)
+    },
+    {
+      refreshInterval: 10000,
     }
-    set(playInfo)
-  })
+  )
 
   return {
     playInfo,
@@ -75,40 +80,33 @@ export function usePlayInfo() {
   }
 }
 
-const statusStreamReaderAtom = atom(new StreamReader())
+const playingStreamReaderAtom = atom(new StreamReader())
 
-export function useStatusStreamReader() {
+export function usePlayingStreamReader() {
   const apiInfo = useAPIInfo()
-  const streamReader = useAtomValue(statusStreamReaderAtom)
+  const streamReader = useAtomValue(playingStreamReaderAtom)
   const protocol = apiInfo.protocol === 'http:' ? 'ws:' : 'wss:'
-  const [status, setStatus] = useState<IStatus | null>(null)
+  const [playing, setPlaying] = useState<IPlaying | null>(null)
 
   const apiInfoRef = useSyncedRef(apiInfo)
 
   useEffect(() => {
-    const handleReceivedStatus = (data: any) => {
-      setStatus(data)
+    const handleReceivedPlaying = (data: any) => {
+      setPlaying(data)
     }
 
     const url = `${protocol}//${apiInfo.hostname}:${apiInfo.port}/`
     streamReader.connect(url)
-    streamReader.subscribe('data', handleReceivedStatus)
+    streamReader.subscribe('mpd-player', handleReceivedPlaying)
     return () => {
-      streamReader.unsubscribe('data', handleReceivedStatus)
+      streamReader.unsubscribe('mpd-player', handleReceivedPlaying)
     }
   }, [apiInfoRef, streamReader])
 
-  const triggerReport = () =>
-    streamReader.send({ channel: 'mpd', packet: 'report' })
-
-  const stopReport = () =>
-    streamReader.send({ channel: 'mpd', packet: 'deport' })
-
   return {
-    triggerReport,
-    stopReport,
     streamReader,
-    status,
+    playing,
+    set: setPlaying,
   }
 }
 

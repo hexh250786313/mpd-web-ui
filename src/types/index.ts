@@ -1,29 +1,3 @@
-/**
- * Example
- * ```typescript
- * const song = {
- *   file: 'Intro-周杰伦-226555042.flac',
- *   last_modified: '2022-07-15T06:10:25Z',
- *   format: {
- *     sample_rate: 48000,
- *     bits: 24,
- *     channels: 2,
- *     sample_rate_short: {
- *       value: 48,
- *       unit: 'kHz',
- *     },
- *     original_value: '48000:24:2',
- *   },
- *   title: 'Intro',
- *   artist: '周杰伦',
- *   album: '最伟大的作品',
- *   time: 30,
- *   duration: 29.813,
- *   pos: 0,
- *   id: 1,
- * }
- * ```
- *  */
 export interface ISong {
   file: string
   last_modified: string
@@ -38,7 +12,7 @@ export interface ISong {
     original_value: string
   }
   title: string
-  artist: string
+  artist: string[]
   album: string
   time: number
   duration: number
@@ -46,22 +20,6 @@ export interface ISong {
   id: number
 }
 
-/**
- * Example
- * ```typescript
- * const pauseStatus = {
- *   repeat: false,
- *   random: false,
- *   single: false,
- *   consume: false,
- *   partition: 'default',
- *   playlist: 2,
- *   playlistlength: 9,
- *   mixrampdb: 0,
- *   state: 'stop',
- * }
- * ```
- *  */
 export interface IPauseStatus {
   repeat: boolean
   random: boolean
@@ -75,43 +33,6 @@ export interface IPauseStatus {
   time?: never
   songid?: never
 }
-
-/**
- * Example
- * ```typescript
- * const playStatus = {
- *   volume: 100,
- *   repeat: false,
- *   random: false,
- *   single: false,
- *   consume: false,
- *   partition: 'default',
- *   playlist: 2,
- *   playlistlength: 9,
- *   mixrampdb: 0,
- *   state: 'play',
- *   song: 8,
- *   songid: 9,
- *   time: {
- *     elapsed: 2,
- *     total: 258,
- *   },
- *   elapsed: 2.091,
- *   bitrate: '949',
- *   duration: 257.84,
- *   audio: {
- *     sample_rate: 48000,
- *     bits: 24,
- *     channels: 2,
- *     sample_rate_short: {
- *       value: 48,
- *       unit: 'kHz',
- *     },
- *     original_value: '48000:24:2',
- *   },
- * }
- * ```
- *  */
 
 export interface IPlayStatus {
   volume: number
@@ -131,7 +52,6 @@ export interface IPlayStatus {
     total: number
   }
   elapsed: number
-  bitrate: string
   duration: number
   audio: {
     sample_rate: number
@@ -145,6 +65,6 @@ export interface IPlayStatus {
   }
 }
 
-export type IStatus = IPlayStatus | IPauseStatus
+export type IPlaying = IPlayStatus | IPauseStatus
 
 export type Tag = 'album' | 'artist' | 'genre' | 'file'
