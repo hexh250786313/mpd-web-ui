@@ -5,17 +5,18 @@ import type { KeyedMutator } from 'swr'
 import type { WritableAtom } from 'jotai'
 
 import { getDefaultLanguage, Language, locales } from '@i18n'
-import { useWarpImmerSetter } from '@lib/jotai'
+import { useInterval, useWarpImmerSetter } from '@lib/jotai'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { atomWithImmer } from 'jotai/immer'
-import { atomWithStorage } from 'jotai/utils'
+import { atomWithObservable, atomWithStorage } from 'jotai/utils'
 import { get } from 'lodash-es'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { useAPIInfo, useClient } from '@stores/request'
 import { StreamReader } from '@lib/streamer'
 import { useSyncedRef } from '@react-hookz/web'
-import { useState } from 'react'
+import { interval } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 interface LibraryListHook<T extends Tag> {
   (): {
@@ -86,27 +87,16 @@ export function usePlayingStreamReader() {
   const apiInfo = useAPIInfo()
   const streamReader = useAtomValue(playingStreamReaderAtom)
   const protocol = apiInfo.protocol === 'http:' ? 'ws:' : 'wss:'
-  const [playing, setPlaying] = useState<IPlaying | null>(null)
 
   const apiInfoRef = useSyncedRef(apiInfo)
 
   useEffect(() => {
-    const handleReceivedPlaying = (data: any) => {
-      setPlaying(data)
-    }
-
     const url = `${protocol}//${apiInfo.hostname}:${apiInfo.port}/`
     streamReader.connect(url)
-    streamReader.subscribe('mpd-player', handleReceivedPlaying)
-    return () => {
-      streamReader.unsubscribe('mpd-player', handleReceivedPlaying)
-    }
   }, [apiInfoRef, streamReader])
 
   return {
     streamReader,
-    playing,
-    set: setPlaying,
   }
 }
 
@@ -139,3 +129,70 @@ export const useAlbums = generateLibraryListHook('album', albumAtom)
 export const useArtists = generateLibraryListHook('artist', artistsAtom)
 export const useGenres = generateLibraryListHook('genre', genresAtom)
 export const useFiles = generateLibraryListHook('file', filesAtom)
+
+export const progressAtom = atom<number | undefined>(0)
+
+export function useProgress() {
+  const { playInfo } = usePlayInfo()
+  const stagedRef = useRef<number | undefined>(undefined)
+  const [progress, setProgress] = useAtom(progressAtom)
+  const total = playInfo?.playing?.time?.total
+  const status = playInfo?.playing?.state
+  const elapsed = playInfo?.playing?.time?.elapsed
+  const [intervalRunning, setIntervalRunning] = useState(true)
+
+  useEffect(() => {
+    if (typeof stagedRef.current !== 'number' && !intervalRunning) {
+      setIntervalRunning(true)
+    }
+  }, [intervalRunning, progress])
+
+  useEffect(() => {
+    console.log({
+      a: elapsed,
+      b: stagedRef.current,
+    })
+    if (typeof elapsed === 'number' && stagedRef.current === undefined) {
+      setIntervalRunning(false)
+      setProgress(elapsed)
+    }
+  }, [elapsed])
+
+  function set(next: number, status = 'run') {
+    if (typeof next === 'number') {
+      if (status === 'run') {
+        stagedRef.current = undefined
+      } else {
+        console.log('false')
+        stagedRef.current = next
+        setIntervalRunning(false)
+      }
+    }
+    console.log('next', next)
+    setProgress(next)
+  }
+
+  useEffect(() => {
+    console.log('progress', progress)
+  }, [progress])
+
+  useInterval(
+    () => {
+      if (status === 'play') {
+        let next = typeof progress === 'number' ? progress + 1 : 0
+        if (typeof total === 'number' && next > total) {
+          next = total
+        }
+        setProgress(next)
+      }
+    },
+    intervalRunning ? 1000 : null
+  )
+
+  useEffect(() => {
+    setIntervalRunning(false)
+    setProgress(elapsed ?? 0)
+  }, [playInfo?.playing?.songid])
+
+  return { progress, total, set }
+}

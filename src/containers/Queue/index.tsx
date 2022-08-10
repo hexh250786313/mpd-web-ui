@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { useClient, usePlayInfo } from '@stores'
 import style from './index.module.scss'
 
-export const Queue: FC<any> = () => {
+export const Queue: FC = () => {
   const { playInfo } = usePlayInfo()
   const client = useClient()
 

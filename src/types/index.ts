@@ -29,7 +29,7 @@ export interface IPauseStatus {
   playlist: number
   playlistlength: number
   mixrampdb: number
-  state: string
+  state: 'play' | 'pause' | 'stop'
   time?: never
   songid?: never
 }
@@ -44,7 +44,7 @@ export interface IPlayStatus {
   playlist: number
   playlistlength: number
   mixrampdb: number
-  state: string
+  state: 'play' | 'pause' | 'stop'
   song: number
   songid: number
   time: {

@@ -29,4 +29,8 @@ export class Playback extends MpdModule {
   async toggle() {
     return this.fetch.post<NoData>('/mpd/native/playback/toggle')
   }
+
+  async seekcur(time: number) {
+    return this.fetch.post<NoData>('/mpd/native/playback/seekcur', [time])
+  }
 }

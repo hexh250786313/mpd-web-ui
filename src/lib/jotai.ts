@@ -42,11 +42,7 @@ export function useWarpImmerSetter<T>(setter: (f: WritableDraft<T>) => void) {
   return set
 }
 
-export function useInterval(
-  callback: () => void,
-  delay: number | null,
-  deps: any[] = []
-) {
+export function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef(callback)
 
   useEffect(() => {
@@ -54,14 +50,13 @@ export function useInterval(
   }, [callback])
 
   useEffect(() => {
-    if (!delay && delay !== 0) {
-      return
+    function tick() {
+      savedCallback.current()
     }
 
-    const id = setInterval(() => {
-      savedCallback.current()
-    }, delay)
-
-    return () => clearInterval(id)
-  }, [delay, ...deps])
+    if (delay !== null) {
+      const id = setInterval(tick, delay)
+      return () => clearInterval(id)
+    }
+  }, [delay])
 }
