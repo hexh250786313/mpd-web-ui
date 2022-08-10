@@ -145,15 +145,10 @@ export function useProgress() {
     if (typeof stagedRef.current !== 'number' && !intervalRunning) {
       setIntervalRunning(true)
     }
-  }, [intervalRunning, progress])
+  }, [intervalRunning, progress, stagedRef.current])
 
   useEffect(() => {
-    console.log({
-      a: elapsed,
-      b: stagedRef.current,
-    })
     if (typeof elapsed === 'number' && stagedRef.current === undefined) {
-      setIntervalRunning(false)
       setProgress(elapsed)
     }
   }, [elapsed])
@@ -162,19 +157,14 @@ export function useProgress() {
     if (typeof next === 'number') {
       if (status === 'run') {
         stagedRef.current = undefined
+        setIntervalRunning(true)
       } else {
-        console.log('false')
         stagedRef.current = next
         setIntervalRunning(false)
       }
     }
-    console.log('next', next)
     setProgress(next)
   }
-
-  useEffect(() => {
-    console.log('progress', progress)
-  }, [progress])
 
   useInterval(
     () => {
