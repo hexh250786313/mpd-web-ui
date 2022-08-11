@@ -156,14 +156,14 @@ export function useProgress() {
   function set(next: number, status = 'run') {
     if (typeof next === 'number') {
       if (status === 'run') {
+        console.log('A')
+        setIntervalRunning(false)
         stagedRef.current = undefined
-        setIntervalRunning(true)
+        setProgress(next)
       } else {
         stagedRef.current = next
-        setIntervalRunning(false)
       }
     }
-    setProgress(next)
   }
 
   useInterval(
