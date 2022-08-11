@@ -8,15 +8,13 @@ import { getDefaultLanguage, Language, locales } from '@i18n'
 import { useInterval, useWarpImmerSetter } from '@lib/jotai'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { atomWithImmer } from 'jotai/immer'
-import { atomWithObservable, atomWithStorage } from 'jotai/utils'
+import { atomWithStorage } from 'jotai/utils'
 import { get } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { useAPIInfo, useClient } from '@stores/request'
 import { StreamReader } from '@lib/streamer'
 import { useSyncedRef } from '@react-hookz/web'
-import { interval } from 'rxjs'
-import { map } from 'rxjs/operators'
 
 interface LibraryListHook<T extends Tag> {
   (): {
