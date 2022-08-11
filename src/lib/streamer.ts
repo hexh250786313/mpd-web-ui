@@ -42,6 +42,26 @@ export class StreamReader<T> {
       this.connected = true
       this.EE.emit('ok', true)
     })
+    this.connection.addEventListener('close', () => {
+      this.retry()
+    })
+  }
+
+  private retry() {
+    const that = this
+    return new Promise((resolve) => {
+      ;(function attempt() {
+        setTimeout(() => {
+          try {
+            that.destroy()
+            that.connect(that.url)
+            resolve(true)
+          } catch (e) {
+            attempt()
+          }
+        }, 1000)
+      })()
+    })
   }
 
   connect(url: string) {

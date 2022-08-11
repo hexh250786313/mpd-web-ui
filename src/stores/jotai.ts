@@ -151,7 +151,7 @@ export function useProgress() {
     if (typeof elapsed === 'number' && stagedRef.current === undefined) {
       setProgress(elapsed)
     }
-  }, [elapsed])
+  }, [playInfo])
 
   function set(next: number, status = 'run') {
     if (typeof next === 'number') {

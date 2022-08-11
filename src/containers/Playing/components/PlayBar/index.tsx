@@ -1,5 +1,3 @@
-import type { IPlaying } from '@types'
-
 import {
   useAPIInfo,
   useClient,

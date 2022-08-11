@@ -30,8 +30,10 @@ export interface IPauseStatus {
   playlistlength: number
   mixrampdb: number
   state: 'play' | 'pause' | 'stop'
-  time?: never
-  songid?: never
+  time: never
+  songid: never
+  elapsed: never
+  bitrate: never
 }
 
 export interface IPlayStatus {
@@ -47,6 +49,7 @@ export interface IPlayStatus {
   state: 'play' | 'pause' | 'stop'
   song: number
   songid: number
+  bitrate: string
   time: {
     elapsed: number
     total: number
