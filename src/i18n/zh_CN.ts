@@ -11,6 +11,9 @@ const CN = {
     play: '播放',
     pause: '暂停',
     unknown: '未知',
+    playing: '正在播放',
+    paused: '已暂停',
+    stopped: '已停止',
   },
   Queue: {
     title: '播放队列',

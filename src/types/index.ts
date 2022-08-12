@@ -21,22 +21,6 @@ export interface ISong {
 }
 
 export interface IPauseStatus {
-  repeat: boolean
-  random: boolean
-  single: boolean
-  consume: boolean
-  partition: string
-  playlist: number
-  playlistlength: number
-  mixrampdb: number
-  state: 'play' | 'pause' | 'stop'
-  time: never
-  songid: never
-  elapsed: never
-  bitrate: never
-}
-
-export interface IPlayStatus {
   volume: number
   repeat: boolean
   random: boolean
@@ -46,7 +30,7 @@ export interface IPlayStatus {
   playlist: number
   playlistlength: number
   mixrampdb: number
-  state: 'play' | 'pause' | 'stop'
+  state: 'pause'
   song: number
   songid: number
   bitrate: string
@@ -68,7 +52,56 @@ export interface IPlayStatus {
   }
 }
 
-export type IPlaying = IPlayStatus | IPauseStatus
+export interface IStopStatus {
+  repeat: boolean
+  random: boolean
+  bitrate: string
+  single: boolean
+  consume: boolean
+  partition: string
+  playlist: number
+  playlistlength: number
+  mixrampdb: number
+  state: 'stop'
+  time: never
+  songid: never
+  elapsed: never
+  volume: never
+}
+
+export interface IPlayStatus {
+  volume: number
+  repeat: boolean
+  random: boolean
+  single: boolean
+  consume: boolean
+  partition: string
+  playlist: number
+  playlistlength: number
+  mixrampdb: number
+  state: 'play'
+  song: number
+  songid: number
+  bitrate: string
+  time: {
+    elapsed: number
+    total: number
+  }
+  elapsed: number
+  duration: number
+  audio: {
+    sample_rate: number
+    bits: number
+    channels: number
+    sample_rate_short: {
+      value: number
+      unit: string
+    }
+    original_value: string
+  }
+}
+
+export type IPlaying = IPlayStatus | IPauseStatus | IStopStatus
 
 export type Tag = 'album' | 'artist' | 'genre' | 'file'
 

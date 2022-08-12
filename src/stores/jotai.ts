@@ -222,3 +222,20 @@ export function useOptions() {
     set,
   }
 }
+
+export const volumeAtom = atom<number | null>(null)
+
+export function useVolume() {
+  const playInfo = useAtomValue(playInfoAtom)
+  const [volume, setVolume] = useAtom(volumeAtom)
+
+  useEffect(() => {
+    if (playInfo?.playing?.state === 'stop') {
+      setVolume(null)
+      return null
+    }
+    setVolume(playInfo?.playing?.volume ?? null)
+  }, [playInfo?.playing?.volume, playInfo?.playing?.state])
+
+  return { volume }
+}

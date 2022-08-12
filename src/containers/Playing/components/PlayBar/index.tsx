@@ -6,7 +6,7 @@ import {
   usePlayingStreamReader,
 } from '@stores'
 import { useLayoutEffect, useMemo } from 'react'
-import { Options, ProgressBar, ProgressTime } from './components'
+import { Options, ProgressBar, ProgressTime, Volume } from './components'
 
 export function PlayBar() {
   const client = useClient()
@@ -22,12 +22,15 @@ export function PlayBar() {
 
   useLayoutEffect(() => {
     streamReader.unsubscribe('mpd-player', setPlaying)
-    streamReader.subscribe('mpd-player', setPlaying)
     streamReader.unsubscribe('mpd-options', setPlaying)
+    streamReader.unsubscribe('mpd-mixer', setPlaying)
+    streamReader.subscribe('mpd-player', setPlaying)
     streamReader.subscribe('mpd-options', setPlaying)
+    streamReader.subscribe('mpd-mixer', setPlaying)
     return () => {
       streamReader.unsubscribe('mpd-options', setPlaying)
       streamReader.unsubscribe('mpd-player', setPlaying)
+      streamReader.unsubscribe('mpd-mixer', setPlaying)
     }
   }, [streamReader, apiInfo])
 
@@ -39,6 +42,7 @@ export function PlayBar() {
       <ProgressTime />
       <ProgressBar />
       <Options />
+      <Volume />
       <button onClick={() => client.playback.prev()}>{t('prev')}</button>
       <button onClick={() => client.playback.stop()}>{t('stop')}</button>
       <button onClick={() => client.playback.toggle()}>{t('toggle')}</button>
