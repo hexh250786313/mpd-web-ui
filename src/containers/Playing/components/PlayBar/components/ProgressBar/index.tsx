@@ -1,24 +1,18 @@
-import { FC, useCallback } from 'react'
+import type { FC } from 'react'
 
 import styles from './index.module.scss'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { playInfoAtom, useClient, useProgress } from '@stores'
 import { animated, useSpring } from 'react-spring'
 import { useAtomValue } from 'jotai'
 import { convertTime } from '@lib/helper'
-
-function getX(target: HTMLDivElement, clientX: MouseEvent['clientX']) {
-  const { left, width } = target.getBoundingClientRect()
-  const nextX = (clientX - left) / width
-  const x = Math.min(1, Math.max(0, nextX))
-  return x
-}
-
-function getNextProgress(x: number, total: number) {
-  return Math.floor(x * total)
-}
-
-const tension = 210
+import {
+  getNextProgress,
+  getTimeLeft,
+  getX,
+  tension,
+  timeWidth,
+} from './helpers'
 
 export const ProgressBar: FC = () => {
   const playInfo = useAtomValue(playInfoAtom)
@@ -34,6 +28,13 @@ export const ProgressBar: FC = () => {
   const barRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<boolean>(false)
   const xRef = useRef<number>(0)
+  const barWidth = barRef.current
+    ? barRef.current.getBoundingClientRect().width
+    : 0
+  const barLeft = barRef.current
+    ? barRef.current.getBoundingClientRect().left
+    : 0
+  const mouseXRatio = barRef.current ? getX(barLeft, barWidth, mouseX) : 0
 
   const percentage = (x ?? 0) * 100 + '%'
   const props = useSpring({
@@ -55,7 +56,7 @@ export const ProgressBar: FC = () => {
   const handleMouseMove = ({ clientX }: MouseEvent) => {
     if (barRef.current) {
       setMouseX(clientX)
-      xRef.current = getX(barRef.current, clientX)
+      xRef.current = getX(barLeft, barWidth, clientX)
     }
     if (dragRef.current) {
       document.ondragstart = () => false
@@ -114,19 +115,16 @@ export const ProgressBar: FC = () => {
         onMouseEnter={() => setTimeVisibility(true)}
         onMouseLeave={() => setTimeVisibility(false)}
         onMouseDown={async (e) => {
-          // onClick={async (e) => {
           e.preventDefault()
           e.stopPropagation()
-          xRef.current = getX(barRef.current!, e.clientX)
-          await set()
+          xRef.current = mouseXRatio
           setX(xRef.current)
-          // dragRef.current = true
+          dragRef.current = true
         }}
       >
         <animated.span style={props} />
         <div
-          onMouseDown={(e) => {
-            e.stopPropagation()
+          onMouseDown={() => {
             dragRef.current = true
           }}
           className={styles.knob}
@@ -138,17 +136,13 @@ export const ProgressBar: FC = () => {
         <span
           className={styles.time}
           style={{
-            left: mouseX,
+            width: timeWidth,
+            left: getTimeLeft(mouseXRatio, barWidth, barLeft),
             visibility:
               timeVisibility || !animationEnabled ? 'visible' : 'hidden',
           }}
         >
-          {convertTime(
-            getNextProgress(
-              barRef.current ? getX(barRef.current, mouseX) : 0,
-              total ?? 0
-            )
-          )}
+          {convertTime(getNextProgress(mouseXRatio, total ?? 0))}
         </span>
       </div>
     </div>

@@ -10,6 +10,7 @@ const CN = {
     toggle: '播放/暂停',
     play: '播放',
     pause: '暂停',
+    unknown: '未知',
   },
   Queue: {
     title: '播放队列',

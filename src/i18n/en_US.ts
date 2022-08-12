@@ -10,6 +10,7 @@ const EN = {
     toggle: 'Play/Pause',
     play: 'Play',
     pause: 'Pause',
+    unknown: 'Unknown',
   },
   Queue: {
     title: 'Queue',

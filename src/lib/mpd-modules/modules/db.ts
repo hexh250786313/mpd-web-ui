@@ -23,4 +23,8 @@ export class DB extends MpdModule {
   async about<T extends Tag>(tag: T) {
     return this.fetch.post<{ [k in T]: string }[]>('/db/about', [tag])
   }
+
+  async list<T extends Tag>(tag: T) {
+    return this.fetch.post<{ [k in T]: string }[]>('/mpd/native/db/list', [tag])
+  }
 }

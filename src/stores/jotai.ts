@@ -108,7 +108,7 @@ const generateLibraryListHook: <T extends Tag>(
     const set = useWarpImmerSetter(setMe)
 
     const { mutate } = useSWR([`/list/${key}s`, client], async () => {
-      const queueInfoResponse = await client.db.about<Tag>(key)
+      const queueInfoResponse = await client.db.list<Tag>(key)
       const rawMes = queueInfoResponse.data.map((item) => item[key])
 
       set(rawMes)
