@@ -99,6 +99,7 @@ export const ProgressBar: FC = () => {
 
   useEffect(() => {
     dragRef.current = false
+    setAnimationEnabled(true)
     if (typeof playInfo?.playing?.time?.elapsed === 'number') {
       setProgress(playInfo?.playing?.time?.elapsed)
     }
