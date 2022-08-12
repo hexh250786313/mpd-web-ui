@@ -1,5 +1,5 @@
 import type { Lang } from '@i18n'
-import type { ISong, IPlaying, Tag } from '@types'
+import type { ISong, IPlaying, Tag, IOptions } from '@types'
 import type { Get } from 'type-fest'
 import type { KeyedMutator } from 'swr'
 import type { WritableAtom } from 'jotai'
@@ -154,7 +154,6 @@ export function useProgress() {
   function set(next: number, status = 'run') {
     if (typeof next === 'number') {
       if (status === 'run') {
-        console.log('A')
         setIntervalRunning(false)
         stagedRef.current = undefined
         setProgress(next)
@@ -183,4 +182,43 @@ export function useProgress() {
   }, [playInfo?.playing?.songid])
 
   return { progress, total, set }
+}
+
+export const optionsAtom = atom<IOptions>({
+  random: false,
+  repeat: false,
+  single: false,
+  consume: false,
+})
+
+export function useOptions() {
+  const playInfo = useAtomValue(playInfoAtom)
+  const [options, setOptions] = useAtom(optionsAtom)
+  const { random, repeat, single, consume } = playInfo?.playing ?? {
+    random: false,
+    repeat: false,
+    single: false,
+    consume: false,
+  }
+
+  useEffect(() => {
+    setOptions({
+      random,
+      repeat,
+      single,
+      consume,
+    })
+  }, [random, repeat, single, consume])
+
+  function set(item: IOptions) {
+    setOptions({
+      ...options,
+      ...item,
+    })
+  }
+
+  return {
+    options,
+    set,
+  }
 }

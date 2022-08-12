@@ -71,3 +71,10 @@ export interface IPlayStatus {
 export type IPlaying = IPlayStatus | IPauseStatus
 
 export type Tag = 'album' | 'artist' | 'genre' | 'file'
+
+export interface IOptions {
+  random: IPlaying['random']
+  repeat: IPlaying['repeat']
+  single: IPlaying['single']
+  consume: IPlaying['consume']
+}

@@ -1,3 +1,5 @@
+import type { IOptions } from '@types'
+
 import { MpdModule } from '@lib/mpd-modules/module'
 
 type NoData = 'OK' | undefined
@@ -32,5 +34,11 @@ export class Playback extends MpdModule {
 
   async seekcur(time: number) {
     return this.fetch.post<NoData>('/mpd/native/playback/seekcur', [time])
+  }
+
+  async options(option: keyof IOptions, state: boolean) {
+    return this.fetch.post<NoData>(`/mpd/native/playback/${option}`, [
+      state ? 1 : 0,
+    ])
   }
 }

@@ -13,6 +13,7 @@ export interface WSResponse {
     | 'sticker'
     | 'subscription'
     | 'message'
+    | 'options'
   data?: any
 }
 
