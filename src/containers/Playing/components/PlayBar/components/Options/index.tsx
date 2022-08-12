@@ -1,6 +1,7 @@
+import type { FC, MouseEventHandler } from 'react'
+
 import { useClient, useOptions } from '@stores'
 import { IOptions } from '@types'
-import { DOMAttributes, FC, MouseEventHandler, useEffect } from 'react'
 
 function Button(params: {
   title: string
