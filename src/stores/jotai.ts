@@ -232,7 +232,7 @@ export function useVolume() {
   useEffect(() => {
     if (playInfo?.playing?.state === 'stop') {
       setVolume(null)
-      return null
+      return
     }
     setVolume(playInfo?.playing?.volume ?? null)
   }, [playInfo?.playing?.volume, playInfo?.playing?.state])

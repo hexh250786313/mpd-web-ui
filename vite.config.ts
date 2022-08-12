@@ -2,8 +2,8 @@ import type { ConfigEnv } from 'vite'
 
 import react from '@vitejs/plugin-react'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
-import jotaiDebugLabel from 'jotai/babel/plugin-debug-label'
-import jotaiReactRefresh from 'jotai/babel/plugin-react-refresh'
+// import jotaiDebugLabel from 'jotai/babel/plugin-debug-label'
+// import jotaiReactRefresh from 'jotai/babel/plugin-react-refresh'
 import tsConfigPath from 'vite-tsconfig-paths'
 import { readFileSync } from 'fs'
 
@@ -37,7 +37,7 @@ export default defineConfig((env) => ({
   plugins: [
     env.mode === 'development' &&
       react({
-        babel: { plugins: [jotaiDebugLabel, jotaiReactRefresh] },
+        // babel: { plugins: [jotaiDebugLabel, jotaiReactRefresh] },
       }),
     tsConfigPath(),
     splitVendorChunkPlugin(),
