@@ -37,7 +37,7 @@ export const ProgressBar: FC = () => {
   const mouseXRatio = barRef.current ? getX(barLeft, barWidth, mouseX) : 0
 
   const percentage = (x ?? 0) * 100 + '%'
-  const props = useSpring({
+  const progressAnimationProps = useSpring({
     width: percentage,
     config: {
       tension,
@@ -122,7 +122,7 @@ export const ProgressBar: FC = () => {
           dragRef.current = true
         }}
       >
-        <animated.span style={props} />
+        <animated.span style={progressAnimationProps} />
         <div
           onMouseDown={() => {
             dragRef.current = true
