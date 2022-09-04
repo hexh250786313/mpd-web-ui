@@ -60,3 +60,31 @@ export function convertTime(time?: number) {
   const second = Math.floor(time % 60)
   return `${minute}:${second < 10 ? '0' : ''}${second}`
 }
+
+export function debounce(delay: number) {
+  let timer: NodeJS.Timeout | null = null
+
+  return (callback: () => void) => {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      timer = null
+      callback()
+    }, delay)
+  }
+}
+
+export function throttle(delay: number) {
+  let waiting = false
+
+  return (callback: () => void) => {
+    if (!waiting) {
+      waiting = true
+      setTimeout(() => {
+        callback()
+        waiting = false
+      }, delay)
+    }
+  }
+}

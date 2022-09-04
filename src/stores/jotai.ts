@@ -237,5 +237,5 @@ export function useVolume() {
     setVolume(playInfo?.playing?.volume ?? null)
   }, [playInfo?.playing?.volume, playInfo?.playing?.state])
 
-  return { volume }
+  return { volume, set: setVolume }
 }

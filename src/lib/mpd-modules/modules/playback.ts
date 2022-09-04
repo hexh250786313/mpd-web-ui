@@ -36,6 +36,10 @@ export class Playback extends MpdModule {
     return this.fetch.post<NoData>('/mpd/native/playback/seekcur', [time])
   }
 
+  async setvol(volume: number) {
+    return this.fetch.post<NoData>('/mpd/native/playback/setvol', [volume])
+  }
+
   async options(option: keyof IOptions, state: boolean) {
     return this.fetch.post<NoData>(`/mpd/native/playback/${option}`, [
       state ? 1 : 0,

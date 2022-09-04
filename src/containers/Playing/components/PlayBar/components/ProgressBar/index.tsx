@@ -51,7 +51,7 @@ export const ProgressBar: FC = () => {
       await client.playback.seekcur(nextProgress)
       setProgress(nextProgress)
     }
-  }, [total, setProgress])
+  }, [total, setProgress, xRef.current])
 
   const handleMouseMove = ({ clientX }: MouseEvent) => {
     if (barRef.current) {
@@ -86,7 +86,7 @@ export const ProgressBar: FC = () => {
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [total, setProgress])
+  }, [total, setProgress, barRef.current, dragRef.current, xRef.current])
 
   useEffect(() => {
     if (!dragRef.current) {
