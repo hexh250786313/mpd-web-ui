@@ -7,7 +7,7 @@ import { animated, useSpring } from 'react-spring'
 import { getX, tension } from '../ProgressBar/helpers'
 import { throttle } from '@lib/helper'
 
-const throttleIt = throttle(500)
+const throttleIt = throttle(1000)
 
 export const Volume: FC = () => {
   const client = useClient()
@@ -62,7 +62,8 @@ export const Volume: FC = () => {
       document.ondragstart = () => false
       setAnimationEnabled(false)
       setX(xRef.current)
-      throttleIt(() => changeVolume(xRef.current))
+      // too many requests
+      // throttleIt(() => changeVolume(xRef.current))
     }
   }
 
