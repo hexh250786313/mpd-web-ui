@@ -1,17 +1,15 @@
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 
 import { useEffect, useRef, useState } from 'react'
 import { useClient, useVolume } from '@stores'
 import styles from '../ProgressBar/index.module.scss'
 import { animated, useSpring } from 'react-spring'
 import { getX, tension } from '../ProgressBar/helpers'
-import { throttle } from '@lib/helper'
-
-const throttleIt = throttle(1000)
+import { getNextVol } from './helpers'
 
 export const Volume: FC = () => {
   const client = useClient()
-  const { volume, set: setVolume } = useVolume()
+  const { volume } = useVolume()
   const [x, setX] = useState(volume)
   const [mouseX, setMouseX] = useState<number>(0)
   const [animationEnabled, setAnimationEnabled] = useState(true)
@@ -70,15 +68,18 @@ export const Volume: FC = () => {
   const handleMouseUp = () => {
     if (dragRef.current && barRef.current) {
       dragRef.current = false
-      changeVolume(xRef.current)
+      changeVolume(getNextVol(xRef.current))
       setAnimationEnabled(true)
       document.ondragstart = () => true
     }
   }
 
   useEffect(() => {
-    window.removeEventListener('mousemove', handleMouseMove)
-    window.removeEventListener('mouseup', handleMouseUp)
+    const mode = import.meta.env.MODE
+    if (mode === 'development') {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
     window.addEventListener('mousemove', handleMouseMove)
     window.addEventListener('mouseup', handleMouseUp)
     return () => {

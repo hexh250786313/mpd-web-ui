@@ -9,7 +9,7 @@
     "build": "yarn clean && vite build",
     "compress": "find ./build \\( -name '*.js' -or -name '*.css' \\) -type f -exec gzip -f {} +",
     "serve": "yarn build && yarn compress && npx http-server -g -p 8888 ./build",
-    "prepare": "npx husky install"
+    "prepare": "npx husky install && yarn clean"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,cjs,mjs}": [

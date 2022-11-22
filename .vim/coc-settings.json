@@ -1,0 +1,29 @@
+{
+  "todo-tree.tags": [
+    {
+      "tagName": "todo",
+      "regex": "@todo",
+      "icon": {
+        "text": "",
+        "hlGroup": "CocInfoSign"
+      }
+    },
+    {
+      "tagName": "fix",
+      "regex": "@fix",
+      "icon": {
+        "text": "",
+        "hlGroup": "Error"
+      }
+    }
+  ],
+  "todo-tree.fileIcon": {
+    "text": "",
+    "hlGroup": "WarningMsg"
+  },
+  "todo-tree.folderIcon": {
+    "text": "",
+    "hlGroup": "DefxIconsOpenedTreeIcon"
+  },
+  "todo-tree.groupByTag": true
+}
